@@ -1,4 +1,5 @@
 import { Component } from "react";
+//let m = React.DOM;
 
 import { IPosts } from "client/common/collections";
 

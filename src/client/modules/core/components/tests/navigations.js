@@ -1,7 +1,8 @@
 const { describe, it } = global;
+import React from 'react';
 import {expect} from 'chai';
 import {shallow} from 'enzyme';
-import Navigations from '../navigations.jsx';
+import Navigations from '../navigations';
 
 describe('components.navigations', () => {
   it('should contain a link to home', () => {

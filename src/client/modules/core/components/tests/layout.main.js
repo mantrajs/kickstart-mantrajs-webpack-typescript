@@ -1,8 +1,8 @@
 const { describe, it } = global;
 import {expect} from 'chai';
 import {shallow} from 'enzyme';
-import MainLayout from '../layout.main.jsx';
-import Navigations from '../navigations.jsx';
+import MainLayout from '../layout.main';
+import Navigations from '../navigations';
 
 describe('components.layouts.main', () => {
   it('should contain navigations', () => {

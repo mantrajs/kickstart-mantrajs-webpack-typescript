@@ -11,13 +11,13 @@ module.exports = function(wallaby) {
       'src/client/modules/**/actions/*.ts',
       'src/client/modules/**/containers/*.ts', 'client/modules/**/libs/*.ts'
     ],
-    tests: [ 'src/client/modules/core/actions/tests/*.ts' ],
+    tests: [ 'src/client/**/tests/*.js' ],
     compilers: {
       '**/*.js*': wallaby.compilers.babel({
         babel: load('babel-core'),
         presets: [ 'es2015', 'stage-2', 'react' ]
       }),
-      '**/*.ts*': wallaby.compilers.typeScript({module: "amd"})
+      '**/*.ts*': wallaby.compilers.typeScript({module: "commonjs", jsx: "react"})
     },
     env: {
       type: 'node'

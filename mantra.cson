@@ -1,0 +1,180 @@
+'language': 'ts',
+'root': 'src',
+'libFolderName': 'common'
+'templates':
+  'ts':
+    'action':
+      'content': """
+        import { IContext } from "../../../configs/context";
+        class Actions {
+          create({Meteor, LocalState}: IContext, myParam: string) {
+            // e.g. update local state
+
+            //LocalState.set('KEY', null);
+            //if (!myParam) {
+            //  LocalState.set('ERROR', 'myParam is required.');
+            //  return;
+            //}
+
+            // e.g. update remote state
+
+            //Meteor.call('posts.createComment', id, postId, text, (err) => {
+            //  if (err) {
+            //    alert(`Post creating failed: ${err.message}`);
+            //  }
+            //});
+          },
+
+          // e.g. clear local state
+          //clearErrors({LocalState}) {
+          //  return LocalState.set('ERROR', null);
+          //}
+        };
+        let actions = new Actions();
+        export default actions;
+      """
+      'placeHolders': []
+    'component':
+      'content': """
+      import React from "react";
+
+      interface IProps {
+      }
+
+      export default class $1 extends React.Component<IProps, {}> {
+        render() {
+          //const { error } = this.props;
+
+          return (
+            <div>
+            </div>
+          );
+        }
+      }
+      """
+      'placeHolders': [
+        "Component Name"
+      ]
+    'container':
+      'content': """
+      import { useDeps, composeWithTracker, composeAll, IContext, IKomposer, IKomposerData } from "../../../configs/context";
+      import Component, { IComponentProps, IComponentActions } from "../components/$1";
+
+      interface IProps {
+        context?: () => IContext;
+        clearErrors: Function;
+      }
+
+      export const composer: IKomposer = ({context, clearErrors}: IProps, onData: IKomposerData<IComponent>) => {
+        const { Meteor, Collections }: IContext = context();
+        if (Meteor.subscribe("$3", postId).ready()) {
+          const options = {
+            sort: {createdAt: -1}
+          };
+          const data = {Collections.$2.find({$2}, options).fetch()};
+          onData(null, {data});
+        } else {
+          onData();
+        }
+
+        return clearErrors;
+      };
+
+      export const depsMapper = (context: IContext, actions: any): ISchedulesViewActions => ({
+        create: actions.schedule.create,
+        handleSearch: actions.schedule.handleSearch,
+        context: () => context
+      });
+
+      export default composeAll<IProps>(
+        composeWithTracker(composer),
+        useDeps(depsMapper)
+      )(Component);
+      """
+      'placeHolders': ["Component Name", "Collection Name", "Subscription"]
+    'method':
+      'content': """
+      // import {Meteor} from 'meteor/meteor';
+      // import {check} from 'meteor/check';
+
+      export default function () {
+        Meteor.methods({
+          '$1'($2) {
+            check($2, String);
+          }
+        });
+      }
+      """
+      'placeHolders': ["Method Name", "Parameters"]
+    'publication':
+      'content': """
+      //import {Meteor} from 'meteor/meteor';
+      //import {check} from 'meteor/check';
+
+      export default function () {
+        Meteor.publish("$1", function () {
+          const selector = {};
+          const options = {
+            // fields: {_id: 1, title: 1},
+            // sort: {createdAt: -1},
+            // limit: 10
+          };
+
+          return $2.find(selector, options);
+        });
+      }
+      """
+      'placeHolders': ["Publication Name", "Collection"]
+    'module': [
+      'path': 'actions'
+      'files': [
+        'name': 'index.ts'
+        'content': """
+        const actions = {
+          // ACTION
+        };
+
+        export default actions;
+        """
+      ]
+    ,
+      'path': 'components'
+    ,
+      'path': 'containers'
+    ,
+      'path': '/',
+      'files': [
+        'name': 'index.ts'
+        'content': """
+        import actions from "./actions";
+        import routes from "./routes";
+
+        import { IContext } from "../../configs/context";
+
+        export default {
+          actions,
+          routes
+        };
+        """
+      ,
+        'name': 'routes.tsx'
+        'content': """
+        import React from "react";
+        import { IContext, IInjectDeps, mount } from "../../configs/context";
+
+        export default function (injectDeps: IInjectDeps) {
+          //const MainLayoutCtx = injectDeps(MainLayout);
+
+          // Move these as a module and call this from a main file
+          // FlowRouter.route("/", {
+          //   name: "ei.list",
+          //   action() {
+          //     mount(MainLayoutCtx, {
+          //       content: () => (<EiList />)
+          //     });
+          //   }
+          // });
+        }
+        """
+      ]
+    ]
